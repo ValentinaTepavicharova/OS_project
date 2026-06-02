@@ -1,0 +1,29 @@
+services:
+  # Услуга за уеб сървъра (PHP приложението)
+  web:
+    build: .
+    container_name: php_shop_app
+    ports:
+      - "8080:80" # Приложението ще бъде достъпно на http://localhost:8080
+    volumes:
+      - .:/var/www/html  
+    depends_on:
+      - db  
+
+  # Услуга за базата данни (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: mysql_shop_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: vale22105tina
+      MYSQL_DATABASE: my_shop
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  
+      - ./my_shop.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
